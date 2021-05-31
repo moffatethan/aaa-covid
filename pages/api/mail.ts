@@ -61,7 +61,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
     try {
       const response = await client.sendMail({
         from: 'no-reply@moffatcore.ca',
-        to: req.body.emailAddress,
+        to: 'dispatch@aaafieldservices.ca',
         subject: `${req.body.firstName} ${req.body.lastName} - COVID-19 Assessment`,
         html: template,
         text: template.toString()
