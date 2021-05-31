@@ -2,6 +2,7 @@ import { provinces } from './../../data/provinces';
 import { companies } from './../../data/companies';
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
+import path from 'path';
 import Email from 'email-templates';
 // @ts-ignore
 import sendInBlue from 'nodemailer-sendinblue-transport';
@@ -38,7 +39,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
 
     const provinceIndex = provinces.findIndex(province => province.value === req.body.province);
 
-    const template = await email.render('assessment/html', {
+    const template = await email.render(path.join(process.cwd(), 'emails', 'assessment', 'html.pug'), {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       emailAddress: req.body.emailAddress,
