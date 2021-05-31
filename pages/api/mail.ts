@@ -23,6 +23,7 @@ const options = {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) => {
+  console.log(options);
   if (req.method === "POST") {
     const client = nodemailer.createTransport(sgTransport(options))
     const email = new Email({
