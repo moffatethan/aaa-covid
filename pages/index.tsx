@@ -92,7 +92,10 @@ export default function Index(): JSX.Element {
   }, [isBrowser]);
 
   useEffect(() => {
-    for (const [key, value] of Object.entries(personalDetail)) {
+    for (let [key, value] of Object.entries(personalDetail)) {
+      if (key === 'phoneNumber') {
+        value = parsePhoneNumber(value, 'US')?.number.toString().substring(2) || '';
+      }
       setValue(key, value);
     }
   }, [personalDetail, isRecognized]);
