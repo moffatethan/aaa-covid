@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react';
 export default function Index(): JSX.Element {
   const [isBrowser, setIsBrowser] = useState<boolean>(false);
   const [isRecognized, setIsRecognized] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
   const [personalDetail, setPersonalDetails] = useState<{
     firstName: string;
     lastName: string;
@@ -25,7 +26,7 @@ export default function Index(): JSX.Element {
     province: string;
   }>({});
   const [loading, setLoading] = useState<boolean>(false);
-  const { handleSubmit } = useFormContext();
+  const { handleSubmit, reset, setValue } = useFormContext();
   const formSubmit = async (data: {
     firstName: string;
     lastName: string;
@@ -42,7 +43,6 @@ export default function Index(): JSX.Element {
     symptons: 'yes' | 'no';
   }) => {
     if (isBrowser) {
-      console.log(data);
       window.localStorage.setItem(
         'personalDetails',
         JSON.stringify({
@@ -66,6 +66,14 @@ export default function Index(): JSX.Element {
 
     if (res.status === 200) {
       setLoading(false);
+      reset();
+    } else {
+      console.error(res);
+      setError(true);
+      setLoading(false);
+      setTimeout(() => {
+        setError(false);
+      }, 5000);
     }
   };
 
@@ -82,6 +90,12 @@ export default function Index(): JSX.Element {
       }
     }
   }, [isBrowser]);
+
+  useEffect(() => {
+    for (const [key, value] of Object.entries(personalDetail)) {
+      setValue(key, value);
+    }
+  }, [personalDetail, isRecognized]);
 
   return (
     <div className="sm:mt-8">
@@ -106,6 +120,11 @@ export default function Index(): JSX.Element {
               are required.
             </p>
           </div>
+          {error ? (
+            <div className="fixed bottom-0 left-0 bg-red-500 w-full p-4 text-white">
+              <p>There was a problem sending the email.</p>
+            </div>
+          ) : null}
         </Container>
       </div>
       <form onSubmit={handleSubmit(formSubmit)}>

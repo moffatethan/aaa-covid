@@ -23,7 +23,6 @@ const options = {
 export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) => {
   if (req.method === "POST") {
     const client = nodemailer.createTransport(sgTransport(options))
-    console.log(req.body);
     const email = new Email({
       message: {
         from: 'no-reply@moffatcore.ca',
@@ -37,8 +36,6 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
     const answerNoToAll = _.pickBy(req.body, (property) => property === 'yes')
 
     const allAnswers = _.pickBy(req.body, (property) => property === 'yes' || property === 'no')
-
-    console.log(allAnswers);
 
     const template = await email.render('assessment/html', {
       firstName: req.body.firstName,
@@ -60,17 +57,21 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
       }
     });
 
-    const response = await client.sendMail({
-      from: 'no-reply@moffatcore.ca',
-      to: req.body.emailAddress,
-      subject: `${req.body.firstName} ${req.body.lastName} - COVID-19 Assessment`,
-      html: template,
-      text: template.toString()
-    })
+    try {
+      const response = await client.sendMail({
+        from: 'no-reply@moffatcore.ca',
+        to: req.body.emailAddress,
+        subject: `${req.body.firstName} ${req.body.lastName} - COVID-19 Assessment`,
+        html: template,
+        text: template.toString()
+      });
 
-    console.log(response);
-
-    return res.json({ name: 'john'});
+      return res.status(200).json(response);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Unable to send email.' });
+    }
   }
   return res.status(400).json({ error: 'Only POST methods allowed.' });
 }
+
