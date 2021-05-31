@@ -1,10 +1,11 @@
+import { provinces } from './../../data/provinces';
+import { companies } from './../../data/companies';
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import Email from 'email-templates';
-import path from 'path';
-import nodemailer from 'nodemailer';
 // @ts-ignore
-import sgTransport from 'nodemailer-sendgrid-transport';
+import sendInBlue from 'nodemailer-sendinblue-transport';
+import nodemailer from 'nodemailer';
 import _ from 'lodash';
 
 type Data = {
@@ -15,16 +16,11 @@ type Error = {
   error: string;
 }
 
-const options = {
-  auth: {
-    api_user: process.env.SENDGRID_USER,
-    api_key: process.env.SENDGRID_KEY
-  }
-}
-
 export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) => {
   if (req.method === "POST") {
-    const client = nodemailer.createTransport(sgTransport(options))
+    const client = nodemailer.createTransport(sendInBlue({
+      apiKey: process.env.SENDINBLUE_KEY
+    }))
     const email = new Email({
       message: {
         from: 'no-reply@moffatcore.ca',
@@ -38,11 +34,22 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
 
     const allAnswers = _.pickBy(req.body, (property) => property === 'yes' || property === 'no')
 
+<<<<<<< HEAD
     const template = await email.render(path.join(process.cwd(), 'emails', 'assessment', 'html.pug'), {
+=======
+    const companyIndex = companies.findIndex(company => company.value === req.body.companyName);
+
+    const provinceIndex = provinces.findIndex(province => province.value === req.body.province);
+
+    const template = await email.render('assessment/html', {
+>>>>>>> dev
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       emailAddress: req.body.emailAddress,
       phoneNumber: req.body.phoneNumber,
+      homeProvince: provinces[provinceIndex].display,
+      companyName: companies[companyIndex].display,
+      lsdNumber: req.body.lsdNumber,
       answerNoToAll: Object.keys(answerNoToAll).length === 0,
       answerNoToAllKeys: Object.keys(answerNoToAll),
       answerNoQuestions: answerNoToAll,
@@ -61,12 +68,15 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
     try {
       const response = await client.sendMail({
         from: 'no-reply@moffatcore.ca',
-        to: 'dispatch@aaafieldservices.ca',
+        to: req.body.emailAddress,
         subject: `${req.body.firstName} ${req.body.lastName} - COVID-19 Assessment`,
         html: template,
         text: template.toString()
       });
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
       // @ts-ignore
       return res.status(200).json(response);
     } catch (err) {

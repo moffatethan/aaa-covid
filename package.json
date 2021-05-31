@@ -13,7 +13,7 @@
     "next": "10.2.3",
     "next-csrf": "^0.1.1",
     "nodemailer": "^6.6.1",
-    "nodemailer-sendgrid-transport": "^0.2.0",
+    "nodemailer-sendinblue-transport": "^1.2.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-feather": "^2.0.9",
