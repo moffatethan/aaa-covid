@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import Email from 'email-templates';
 import nodemailer from 'nodemailer';
+// @ts-ignore
 import sgTransport from 'nodemailer-sendgrid-transport';
 import _ from 'lodash';
 
@@ -66,6 +67,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
         text: template.toString()
       });
 
+      // @ts-ignore
       return res.status(200).json(response);
     } catch (err) {
       console.error(err);

@@ -24,7 +24,7 @@ export default function Index(): JSX.Element {
     emailAddress: string;
     phoneNumber: string;
     province: string;
-  }>({});
+  }>({} as { firstName: string; lastName: string; emailAddress: string; phoneNumber: string; province: string });
   const [loading, setLoading] = useState<boolean>(false);
   const { handleSubmit, reset, setValue } = useFormContext();
   const formSubmit = async (data: {
