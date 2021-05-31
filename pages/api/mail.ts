@@ -34,15 +34,11 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
 
     const allAnswers = _.pickBy(req.body, (property) => property === 'yes' || property === 'no')
 
-<<<<<<< HEAD
-    const template = await email.render(path.join(process.cwd(), 'emails', 'assessment', 'html.pug'), {
-=======
     const companyIndex = companies.findIndex(company => company.value === req.body.companyName);
 
     const provinceIndex = provinces.findIndex(province => province.value === req.body.province);
 
     const template = await email.render('assessment/html', {
->>>>>>> dev
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       emailAddress: req.body.emailAddress,
@@ -73,10 +69,6 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
         html: template,
         text: template.toString()
       });
-<<<<<<< HEAD
-
-=======
->>>>>>> dev
       // @ts-ignore
       return res.status(200).json(response);
     } catch (err) {
