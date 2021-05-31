@@ -34,10 +34,23 @@ style(type="text/css").
     border: 1px solid #eee;
     height: 1px;
   }
+  .companyDetails {
+    padding: 15px;
+    border: 2px solid #9CA3AF;
+    border-radius: 5px;
+    background-color: #F3F4F6;
+  }
+  .faded {
+    opacity: .75;
+  }
 div(class="heading")
   h1 #{firstName} #{lastName} has filled in their COVID-19 Assessment
   p #{emailAddress}
   p #{phoneNumber}
+  p #{homeProvince}
+  div(class="companyDetails")
+    p Working for #{companyName}
+    p(class="faded") LSD# #{lsdNumber}
   p Date: #{new Intl.DateTimeFormat().format(new Date())}
   if !answerNoToAll
     div(class="alert alert-red") 
