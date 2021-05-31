@@ -1,5 +1,3 @@
-import { IQuestion } from "./Question";
-
 /**
  * A section of questions to present to the employee.
  *
