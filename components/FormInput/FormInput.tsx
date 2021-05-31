@@ -1,16 +1,14 @@
-import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
-import { encode, decode } from 'js-base64';
-
-type FormInputProps = {
-  label: string;
-  isRequired?: boolean;
-  props?: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-};
+import { encode } from 'js-base64';
+import { useFormContext } from 'react-hook-form';
+import { FormInputProps } from '../../props/FormProps';
 
 export const FormInput = (formInputProps: FormInputProps) => {
-  console.log(formInputProps);
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
   return (
-    <div className="mb-3">
+    <div className="mb-10">
       <label htmlFor={encode(formInputProps.label)} className="cursor-pointer">
         {formInputProps.label}
         {formInputProps.isRequired && (
@@ -21,9 +19,15 @@ export const FormInput = (formInputProps: FormInputProps) => {
       </label>
       <input
         id={encode(formInputProps.label)}
-        className="mt-3 w-full py-3 px-4 border border-gray-500 rounded-md"
-        {...formInputProps.props}
+        className={`mt-3 w-full py-3 px-4 border border-gray-500 rounded-md font-medium transition-colors shadow-sm hover:border-gray-900 ${
+          errors && errors[formInputProps.name] && 'border-red-500'
+        }`}
+        {...register(formInputProps.name, { required: formInputProps.isRequired })}
       />
+      {formInputProps.help && <p className="text-xs mt-2 text-gray-400 font-normal">{formInputProps.help}</p>}
+      {errors && errors[formInputProps.name] && (
+        <span className="block mt-2 text-sm text-red-500">This field is required.</span>
+      )}
     </div>
   );
 };

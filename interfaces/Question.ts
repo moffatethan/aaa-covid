@@ -6,6 +6,10 @@ import { IInput } from "./Input";
  * @interface IQuestion
  */
 export interface IQuestion {
-  input: IInput;
+  name: string;
+  label: string;
   isRequired?: boolean;
+  type?: string;
+  options?: {}[];
+  selectOptions?: string[];
 }

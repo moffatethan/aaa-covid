@@ -1,0 +1,62 @@
+style(type="text/css").
+  .heading {
+    background-color: #F9FAFB;
+    padding: 1.25rem;
+  }
+  .alert {
+    margin-top: 2rem;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+  }
+  .alert-red {
+    color: #EF4444;
+    background-color: #FEF2F2;
+    border: 2px solid #EF4444;
+    border-radius: 5px;
+  }
+  .alert-green {
+    color: #10B981;
+    background-color: #ECFDF5;
+    border: 2px solid #10B981;
+    border-radius: 5px;
+  }
+  .alert-img {
+    width: 35px;
+    height: 35px;
+    margin-right: 8px;
+  }
+  .capitalize {
+    text-transform: capitalize;
+    font-weight: bold;
+  }
+  .separator {
+    border: 1px solid #eee;
+    height: 1px;
+  }
+div(class="heading")
+  h1 #{firstName} #{lastName} has filled in their COVID-19 Assessment
+  p #{emailAddress}
+  p #{phoneNumber}
+  p Date: #{new Intl.DateTimeFormat().format(new Date())}
+  if !answerNoToAll
+    div(class="alert alert-red") 
+      img(class="alert-img" src="https://res.cloudinary.com/dpepwhv11/image/upload/v1622463127/exclamation-circle-solid_iuqts1.png")
+      h4 #{firstName} #{lastName} answered yes to some assessment questions
+    ul 
+      each answer in answerNoToAllKeys
+        li
+          p #{questions[answer]}.
+          p(class="capitalize") #{answerNoQuestions[answer]}
+  else
+    div(class="alert alert-green")
+      img(class="alert-img" src="https://res.cloudinary.com/dpepwhv11/image/upload/v1622463127/check-solid_v7jrxu.png")
+      h4 #{firstName} #{lastName} answered no to all questions.
+
+h4 Here are all of #{firstName}'s answers.
+
+ul
+  each answer in allAnswersKeys
+    li
+      p #{questions[answer]}.
+      p(class="capitalize") #{allAnswers[answer]}
