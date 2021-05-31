@@ -39,7 +39,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
 
     const allAnswers = _.pickBy(req.body, (property) => property === 'yes' || property === 'no')
 
-    const template = await email.render(path.join(__dirname, '../../../../', 'emails', 'assessment/html.pug'), {
+    const template = await email.render('assessment/html.pug', {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       emailAddress: req.body.emailAddress,
