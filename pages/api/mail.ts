@@ -28,7 +28,6 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
       message: {
         from: 'no-reply@moffatcore.ca',
       },
-      send: true,
       transport: {
         jsonTransport: true
       }
