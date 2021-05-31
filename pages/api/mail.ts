@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import Email from 'email-templates';
+import path from 'path';
 import nodemailer from 'nodemailer';
 // @ts-ignore
 import sgTransport from 'nodemailer-sendgrid-transport';
@@ -37,7 +38,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
 
     const allAnswers = _.pickBy(req.body, (property) => property === 'yes' || property === 'no')
 
-    const template = await email.render('assessment/html', {
+    const template = await email.render('../emails/assessment/html.pug', {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       emailAddress: req.body.emailAddress,
