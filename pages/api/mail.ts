@@ -24,7 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
     }))
     const email = new Email({
       message: {
-        from: 'no-reply@moffatcore.ca',
+        from: 'no-reply@aaafieldservices.ca',
       },
       transport: {
         jsonTransport: true
@@ -64,8 +64,8 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
 
     try {
       const response = await client.sendMail({
-        from: 'no-reply@moffatcore.ca',
-        to: req.body.emailAddress,
+        from: 'no-reply@aaafieldservices.ca',
+        to: process.env.NODE_ENV === 'development' ? req.body.emailAddress : 'dispatch@aaafieldservices.ca',
         subject: `${req.body.firstName} ${req.body.lastName} - COVID-19 Assessment`,
         html: template,
         text: template.toString()
