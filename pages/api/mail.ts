@@ -23,7 +23,6 @@ const options = {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) => {
-  console.log(options);
   if (req.method === "POST") {
     const client = nodemailer.createTransport(sgTransport(options))
     const email = new Email({
@@ -39,7 +38,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
 
     const allAnswers = _.pickBy(req.body, (property) => property === 'yes' || property === 'no')
 
-    const template = await email.render('assessment/html.pug', {
+    const template = await email.render(path.join(process.cwd(), 'emails', 'assessment', 'html.pug'), {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       emailAddress: req.body.emailAddress,
