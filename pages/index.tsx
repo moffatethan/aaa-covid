@@ -18,6 +18,7 @@ export default function Index(): JSX.Element {
   const [isBrowser, setIsBrowser] = useState<boolean>(false);
   const [isRecognized, setIsRecognized] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
   const [personalDetail, setPersonalDetails] = useState<{
     firstName: string;
     lastName: string;
@@ -65,10 +66,10 @@ export default function Index(): JSX.Element {
     });
 
     if (res.status === 200) {
-      setLoading(false);
       reset();
+      setLoading(false);
+      setSuccess(true);
     } else {
-      console.error(res);
       setError(true);
       setLoading(false);
       setTimeout(() => {
@@ -90,6 +91,12 @@ export default function Index(): JSX.Element {
       }
     }
   }, [isBrowser]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSuccess(false);
+    }, 5000);
+  }, [success]);
 
   useEffect(() => {
     for (let [key, value] of Object.entries(personalDetail)) {
@@ -126,6 +133,11 @@ export default function Index(): JSX.Element {
           {error ? (
             <div className="fixed bottom-0 left-0 bg-red-500 w-full p-4 text-white">
               <p>There was a problem sending the email.</p>
+            </div>
+          ) : null}
+          {success ? (
+            <div className="fixed bottom-0 left-0 bg-blue-500 w-full p-4 text-white">
+              <p>Assessment completed</p>
             </div>
           ) : null}
         </Container>
