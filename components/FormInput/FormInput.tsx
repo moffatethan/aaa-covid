@@ -19,7 +19,7 @@ export const FormInput = (formInputProps: FormInputProps) => {
       </label>
       <input
         id={encode(formInputProps.label)}
-        className={`mt-3 w-full py-3 px-4 border border-gray-500 rounded-md font-medium transition-colors shadow-sm hover:border-gray-900 ${
+        className={`mt-3 w-full py-3 px-4 border border-gray-500 rounded-md font-medium shadow-sm focus:outline-none focus:ring focus:border-blue-600 ${
           errors && errors[formInputProps.name] && 'border-red-500'
         }`}
         {...register(formInputProps.name, { required: formInputProps.isRequired })}

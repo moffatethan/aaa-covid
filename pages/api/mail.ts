@@ -1,7 +1,7 @@
 import { provinces } from './../../data/provinces';
-import { companies } from './../../data/companies';
+import { companies as companyObj } from './../../data/companies';
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
 import path from 'path';
 import Email from 'email-templates';
 // @ts-ignore
@@ -10,34 +10,38 @@ import nodemailer from 'nodemailer';
 import _ from 'lodash';
 
 type Data = {
-  name: string
-}
+  name: string;
+};
 
 type Error = {
   error: string;
-}
+};
 
 export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) => {
-  if (req.method === "POST") {
-    const client = nodemailer.createTransport(sendInBlue({
-      apiKey: process.env.SENDINBLUE_KEY
-    }))
+  if (req.method === 'POST') {
+    const client = nodemailer.createTransport(
+      sendInBlue({
+        apiKey: process.env.SENDINBLUE_KEY,
+      }),
+    );
     const email = new Email({
       message: {
         from: 'no-reply@aaafieldservices.ca',
       },
       transport: {
-        jsonTransport: true
-      }
+        jsonTransport: true,
+      },
     });
 
-    const answerNoToAll = _.pickBy(req.body, (property) => property === 'yes')
+    const companies = companyObj.list;
 
-    const allAnswers = _.pickBy(req.body, (property) => property === 'yes' || property === 'no')
+    const answerNoToAll = _.pickBy(req.body, (property) => property === 'yes');
 
-    const companyIndex = companies.findIndex(company => company.value === req.body.companyName);
+    const allAnswers = _.pickBy(req.body, (property) => property === 'yes' || property === 'no');
 
-    const provinceIndex = provinces.findIndex(province => province.value === req.body.province);
+    const companyIndex = companies.findIndex((company) => company.value === req.body.companyName);
+
+    const provinceIndex = provinces.findIndex((province) => province.value === req.body.province);
 
     const template = await email.render(path.join(process.cwd(), 'emails', 'assessment', 'html.pug'), {
       firstName: req.body.firstName,
@@ -54,12 +58,14 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
       allAnswers,
       questions: {
         travelledOutside: 'Travelled outside Canada within the last 14 days',
-        closeContactTravelOutside: 'Has been in close contact with someone who travelled outside of Canada within the last 14 days',
+        closeContactTravelOutside:
+          'Has been in close contact with someone who travelled outside of Canada within the last 14 days',
         closeContactWithCovid: 'Has been in close contact with someone with or suspected to have COVID-19',
-        outsideGroup: 'Has been in close contact with a group 10 or more outside of their immediate family within the last 14 days',
+        outsideGroup:
+          'Has been in close contact with a group 10 or more outside of their immediate family within the last 14 days',
         isTested: 'Has been tested and awaiting on results',
-        symptons: 'Has symptons related to COVID-19'
-      }
+        symptons: 'Has symptons related to COVID-19',
+      },
     });
 
     try {
@@ -68,7 +74,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
         to: process.env.NODE_ENV === 'development' ? req.body.emailAddress : 'dispatch@aaafieldservices.ca',
         subject: `${req.body.firstName} ${req.body.lastName} - COVID-19 Assessment`,
         html: template,
-        text: template.toString()
+        text: template.toString(),
       });
       // @ts-ignore
       return res.status(200).json(response);
@@ -78,5 +84,4 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
     }
   }
   return res.status(400).json({ error: 'Only POST methods allowed.' });
-}
-
+};

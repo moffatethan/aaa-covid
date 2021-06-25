@@ -188,7 +188,12 @@ export default function Index(): JSX.Element {
             name: 'Company Details',
           }}
           number={2}>
-          <FormSelect label="Company Name" name="companyName" selectOptions={companies} isRequired />
+          <FormSelect
+            label="Company Name"
+            name="companyName"
+            selectOptions={[companies.default, ...companies.list.sort((a, b) => a.display.localeCompare(b.display))]}
+            isRequired
+          />
           <FormInput label="LSD Number" name="lsdNumber" type="text" isRequired />
         </FormSection>
         <FormSection
