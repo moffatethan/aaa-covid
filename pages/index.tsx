@@ -27,7 +27,8 @@ export default function Index(): JSX.Element {
     province: string;
   }>({} as { firstName: string; lastName: string; emailAddress: string; phoneNumber: string; province: string });
   const [loading, setLoading] = useState<boolean>(false);
-  const { handleSubmit, reset, setValue } = useFormContext();
+  const { handleSubmit, reset, setValue, watch } = useFormContext();
+  const companyName = watch('companyName');
   const formSubmit = async (data: {
     firstName: string;
     lastName: string;
@@ -35,6 +36,7 @@ export default function Index(): JSX.Element {
     phoneNumber: string;
     province: string;
     companyName: string;
+    otherCompanyName?: string;
     lsdNumber: string;
     travelledOutside: 'yes' | 'no';
     closeContactTravelOutside: 'yes' | 'no';
@@ -203,9 +205,16 @@ export default function Index(): JSX.Element {
           <FormSelect
             label="Company Name"
             name="companyName"
-            selectOptions={[companies.default, ...companies.list.sort((a, b) => a.display.localeCompare(b.display))]}
+            selectOptions={[
+              companies.default,
+              ...companies.list.sort((a, b) => a.display.localeCompare(b.display)),
+              companies.lastItem,
+            ]}
             isRequired
           />
+          {companyName === companies.lastItem.value && (
+            <FormInput label="Type company name" name="otherCompanyName" type="text" isRequired />
+          )}
           <FormInput label="LSD Number" name="lsdNumber" type="text" isRequired />
         </FormSection>
         <FormSection

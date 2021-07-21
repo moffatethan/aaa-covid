@@ -3,6 +3,10 @@ export const companies = {
     value: '',
     display: 'Select company',
   },
+  lastItem: {
+    value: 'other',
+    display: 'Other',
+  },
   list: [
     {
       value: 'cnrl',

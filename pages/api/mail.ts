@@ -49,7 +49,10 @@ export default async (req: NextApiRequest, res: NextApiResponse<Data | Error>) =
       emailAddress: req.body.emailAddress,
       phoneNumber: req.body.phoneNumber,
       homeProvince: provinces[provinceIndex].display,
-      companyName: companies[companyIndex].display,
+      companyName:
+        req.body.companyName === 'other' && req.body.otherCompanyName
+          ? req.body.otherCompanyName
+          : companies[companyIndex].display,
       lsdNumber: req.body.lsdNumber,
       answerNoToAll: Object.keys(answerNoToAll).length === 0,
       answerNoToAllKeys: Object.keys(answerNoToAll),
